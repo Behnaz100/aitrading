@@ -3,8 +3,6 @@ import numpy as np
 import pandas as pd
 import datetime
 
-from aitrading.utils import simple_time_and_memory_tracker
-
 
 def str_to_datetime(s):
     split = s.split('-')
@@ -13,6 +11,7 @@ def str_to_datetime(s):
 
 
 def df_to_windowed_df(dataframe, first_date_str, last_date_str, n=3):
+    print(f'Creating windowed dataframe from {first_date_str} to {last_date_str}')
     first_date = str_to_datetime(first_date_str)
     last_date = str_to_datetime(last_date_str)
 

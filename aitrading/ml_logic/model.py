@@ -37,7 +37,7 @@ def initialize_model(input_shape: tuple) -> Model:
         raise ValueError(f"Input shape must be a tuple with 2 dimensions and second element 1, got {input_shape}")
 
     model = Sequential([
-        Bidirectional(LSTM(64, return_sequences=True, kernel_regularizer=l2(0.001)), input_shape=input_shape),
+        Bidirectional(LSTM(64, return_sequences=True, kernel_regularizer=l2(0.001)), input_shape=(3,1)),
         BatchNormalization(),
         Dropout(0.3),
         LSTM(128, return_sequences=False, kernel_regularizer=l2(0.001)),
@@ -72,7 +72,6 @@ def train_model(
         y: np.ndarray,
         batch_size=256,
         patience=2,
-        validation_data=None,  # overrides validation_split
         validation_split=0.3
 ) -> Tuple[Model, dict]:
     """
@@ -90,7 +89,7 @@ def train_model(
     history = model.fit(
         X,
         y,
-        validation_data=validation_data,
+        # validation_data=(x_val, y_val),
         validation_split=validation_split,
         epochs=100,
         batch_size=batch_size,
@@ -98,7 +97,7 @@ def train_model(
         verbose=0
     )
 
-    print(f"✅ Model trained on {len(X)} rows with min val MAE: {round(np.min(history.history['val_mae']), 2)}")
+    # print(f"✅ Model trained on {len(X)} rows with min val MAE: {round(np.min(history.history['val_mae']), 2)}")
 
     return model, history
 
