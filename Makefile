@@ -4,6 +4,8 @@ reinstall_package:
 	@pip uninstall -y aitrading || :
 	@pip install -e .
 
+
+
 run_preprocess:
 	python -c 'from aitrading.interface.main import preprocess; preprocess()'
 
