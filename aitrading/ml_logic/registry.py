@@ -7,7 +7,7 @@ from colorama import Fore, Style
 from tensorflow import keras
 from google.cloud import storage
 
-from taxifare.params import *
+from aitrading.params import *
 import mlflow
 from mlflow.tracking import MlflowClient
 
@@ -57,18 +57,18 @@ def save_model(model: keras.Model = None) -> None:
 
     print("✅ Model saved locally")
 
-    if MODEL_TARGET == "gcs":
-        # 🎁 We give you this piece of code as a gift. Please read it carefully! Add a breakpoint if needed!
+    # if MODEL_TARGET == "gcs":
+    #     # 🎁 We give you this piece of code as a gift. Please read it carefully! Add a breakpoint if needed!
 
-        model_filename = model_path.split("/")[-1] # e.g. "20230208-161047.h5" for instance
-        client = storage.Client()
-        bucket = client.bucket(BUCKET_NAME)
-        blob = bucket.blob(f"models/{model_filename}")
-        blob.upload_from_filename(model_path)
+    #     model_filename = model_path.split("/")[-1] # e.g. "20230208-161047.h5" for instance
+    #     client = storage.Client()
+    #     bucket = client.bucket(BUCKET_NAME)
+    #     blob = bucket.blob(f"models/{model_filename}")
+    #     blob.upload_from_filename(model_path)
 
-        print("✅ Model saved to GCS")
+    #     print("✅ Model saved to GCS")
 
-        return None
+    #     return None
 
     if MODEL_TARGET == "mlflow":
         mlflow.tensorflow.log_model(

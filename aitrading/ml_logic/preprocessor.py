@@ -11,6 +11,7 @@ from sklearn.preprocessing import OneHotEncoder, FunctionTransformer
 from aitrading.ml_logic.encoders import str_to_datetime, df_to_windowed_df, windowed_df_to_date_x_y
 
 
+
 def preprocess_date(df: pd.DataFrame, min_date: str, max_date: str) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     # check if X is a DataFrame and include the necessary columns
     # such as Date, Close, Volume

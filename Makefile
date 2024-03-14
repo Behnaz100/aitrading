@@ -1,30 +1,24 @@
 .DEFAULT_GOAL := default
 #################### PACKAGE ACTIONS ###################
 reinstall_package:
-	@pip uninstall -y taxifare || :
+	@pip uninstall -y aitrading || :
 	@pip install -e .
 
 
 
 run_preprocess:
-	python -c 'from taxifare.interface.main import preprocess; preprocess()'
+	python -c 'from aitrading.interface.main import preprocess; preprocess()'
 
 run_train:
-	python -c 'from taxifare.interface.main import train; train()'
+	python -c 'from aitrading.interface.main import train; train()'
 
 run_pred:
-	python -c 'from taxifare.interface.main import pred; pred()'
+	python -c 'from aitrading.interface.main import pred; pred()'
 
 run_evaluate:
-	python -c 'from taxifare.interface.main import evaluate; evaluate()'
+	python -c 'from aitrading.interface.main import evaluate; evaluate()'
 
 run_all: run_preprocess run_train run_pred run_evaluate
-
-run_workflow:
-	PREFECT__LOGGING__LEVEL=${PREFECT_LOG_LEVEL} python -m taxifare.interface.workflow
-
-run_api:
-	uvicorn taxifare.api.fast:app --reload
 
 ##################### TESTS #####################
 test_gcp_setup:
@@ -35,28 +29,43 @@ test_gcp_setup:
 	tests/all/test_gcp_setup.py::TestGcpSetup::test_code_get_wagon_project
 
 default:
-	cat tests/api/test_output.txt
+	cat tests/cloud_training/test_output.txt
 
 test_kitt:
-	@echo "\n 🧪 computing and saving your progress at 'tests/api/test_output.txt'..."
-	@pytest tests/api -c "./tests/pytest_kitt.ini" 2>&1 > tests/api/test_output.txt || true
+	@echo "\n 🧪 computing and saving your progress at 'tests/cloud_training/test_output.txt'...(this can take a while)"
+	@pytest tests/cloud_training -c "./tests/pytest_kitt.ini" 2>&1 > tests/cloud_training/test_output.txt || true
 	@echo "\n 🙏 Please: \n git add tests \n git commit -m 'checkpoint' \n ggpush"
 
-test_api_root:
-	pytest \
-	tests/api/test_endpoints.py::test_root_is_up --asyncio-mode=strict -W "ignore" \
-	tests/api/test_endpoints.py::test_root_returns_greeting --asyncio-mode=strict -W "ignore"
+test_preprocess:
+	@pytest tests/cloud_training/test_main.py::TestMain::test_route_preprocess
 
-test_api_predict:
-	pytest \
-	tests/api/test_endpoints.py::test_predict_is_up --asyncio-mode=strict -W "ignore" \
-	tests/api/test_endpoints.py::test_predict_is_dict --asyncio-mode=strict -W "ignore" \
-	tests/api/test_endpoints.py::test_predict_has_key --asyncio-mode=strict -W "ignore" \
-	tests/api/test_endpoints.py::test_predict_val_is_float --asyncio-mode=strict -W "ignore"
+test_train:
+	@pytest tests/cloud_training/test_main.py::TestMain::test_route_train
 
-test_api_on_prod:
-	pytest \
-	tests/api/test_cloud_endpoints.py --asyncio-mode=strict -W "ignore"
+test_evaluate:
+	@pytest tests/cloud_training/test_main.py::TestMain::test_route_evaluate
+
+test_pred:
+	@pytest tests/cloud_training/test_main.py::TestMain::test_route_pred
+
+test_main_all: test_preprocess test_train test_evaluate test_pred
+
+test_gcp_project:
+	@pytest \
+	tests/all/test_gcp_setup.py::TestGcpSetup::test_setup_project_id
+
+test_gcp_bucket:
+	@pytest \
+	tests/all/test_gcp_setup.py::TestGcpSetup::test_setup_bucket_name
+
+test_big_query:
+	@pytest \
+	tests/cloud_training/test_cloud_data.py::TestCloudData::test_big_query_dataset_variable_exists \
+	tests/cloud_training/test_cloud_data.py::TestCloudData::test_cloud_data_create_dataset \
+	tests/cloud_training/test_cloud_data.py::TestCloudData::test_cloud_data_create_table
+
+test_vm:
+	tests/cloud_training/test_vm.py
 
 
 ################### DATA SOURCES ACTIONS ################
@@ -105,4 +114,3 @@ reset_gcs_files:
 	-gsutil mb -p ${GCP_PROJECT} -l ${GCP_REGION} gs://${BUCKET_NAME}
 
 reset_all_files: reset_local_files reset_bq_files reset_gcs_files
-
