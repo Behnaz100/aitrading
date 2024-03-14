@@ -1,78 +1,78 @@
 import math
 import numpy as np
 import pandas as pd
-import pygeohash as gh
-
-from aitrading.utils import simple_time_and_memory_tracker
-
-def transform_time_features(X: pd.DataFrame) -> np.ndarray:
-    assert isinstance(X, pd.DataFrame)
-
-    timedelta = (X["pickup_datetime"] - pd.Timestamp('2009-01-01T00:00:00', tz='UTC')) / pd.Timedelta(1,'D')
-
-    pickup_dt = X["pickup_datetime"].dt.tz_convert("America/New_York").dt
-    dow = pickup_dt.weekday
-    hour = pickup_dt.hour
-    month = pickup_dt.month
-
-    hour_sin = np.sin(2 * math.pi / 24 * hour)
-    hour_cos = np.cos(2*math.pi / 24 * hour)
-
-    return np.stack([hour_sin, hour_cos, dow, month, timedelta], axis=1)
+import datetime
 
 
-def transform_lonlat_features(X: pd.DataFrame) -> pd.DataFrame:
-    assert isinstance(X, pd.DataFrame)
-    lonlat_features = ["pickup_latitude", "pickup_longitude", "dropoff_latitude", "dropoff_longitude"]
+def str_to_datetime(s):
+    split = s.split('-')
+    year, month, day = int(split[0]), int(split[1]), int(split[2])
+    return datetime.datetime(year=year, month=month, day=day)
 
-    def distances_vectorized(df: pd.DataFrame, start_lat: str, start_lon: str, end_lat: str, end_lon: str) -> dict:
-        """
-        Calculate the haversine and Manhattan distances between two
-        points on the earth (specified in decimal degrees)
-        Vectorized version for pandas df
-        Computes distance in km
-        """
-        earth_radius = 6371
 
-        lat_1_rad, lon_1_rad = np.radians(df[start_lat]), np.radians(df[start_lon])
-        lat_2_rad, lon_2_rad = np.radians(df[end_lat]), np.radians(df[end_lon])
+def df_to_windowed_df(dataframe, first_date_str, last_date_str, n=3):
+    print(f'Creating windowed dataframe from {first_date_str} to {last_date_str}')
+    first_date = str_to_datetime(first_date_str)
+    last_date = str_to_datetime(last_date_str)
 
-        dlon_rad = lon_2_rad - lon_1_rad
-        dlat_rad = lat_2_rad - lat_1_rad
+    target_date = first_date
 
-        manhattan_rad = np.abs(dlon_rad) + np.abs(dlat_rad)
-        manhattan_km = manhattan_rad * earth_radius
+    dates = []
+    X, Y = [], []
 
-        a = (np.sin(dlat_rad / 2.0)**2 + np.cos(lat_1_rad) * np.cos(lat_2_rad) * np.sin(dlon_rad / 2.0)**2)
-        haversine_rad = 2 * np.arcsin(np.sqrt(a))
-        haversine_km = haversine_rad * earth_radius
+    last_time = False
+    while True:
+        df_subset = dataframe.loc[:target_date].tail(n + 1)
 
-        return dict(
-            haversine=haversine_km,
-            manhattan=manhattan_km
-        )
+        if len(df_subset) != n + 1:
+            print(f'Error: Window of size {n} is too large for date {target_date}')
+            return
 
-    result = pd.DataFrame(distances_vectorized(X, *lonlat_features))
+        values = df_subset['dir'].to_numpy()
+        values_volume = df_subset['Volume'].to_numpy()
 
-    return result
+        x_dir, y = values[:-1], values[-1]
+        x_volume, y_volume = values_volume[:-1], values_volume[-1]
 
-def compute_geohash(X: pd.DataFrame, precision: int = 5) -> np.ndarray:
-    """
-    Add a geohash (ex: "dr5rx") of len "precision" = 5 by default
-    corresponding to each (lon, lat) tuple, for pick-up, and drop-off
-    """
-    assert isinstance(X, pd.DataFrame)
+        dates.append(target_date)
+        X.append(np.concatenate((x_dir, x_volume), axis=0))
+        Y.append(y)
 
-    X["geohash_pickup"] = X.apply(lambda x: gh.encode(
-        x.pickup_latitude,
-        x.pickup_longitude,
-        precision=precision
-    ), axis=1)
+        next_week = dataframe.loc[target_date:target_date + datetime.timedelta(days=7)]
+        next_datetime_str = str(next_week.head(2).tail(1).index.values[0])
+        next_date_str = next_datetime_str.split('T')[0]
+        year_month_day = next_date_str.split('-')
+        year, month, day = year_month_day
+        next_date = datetime.datetime(day=int(day), month=int(month), year=int(year))
 
-    X["geohash_dropoff"] = X.apply(lambda x: gh.encode(
-        x.dropoff_latitude,
-        x.dropoff_longitude,
-        precision=precision
-    ), axis=1)
+        if last_time:
+            break
 
-    return X[["geohash_pickup", "geohash_dropoff"]]
+        target_date = next_date
+
+        if target_date == last_date:
+            last_time = True
+
+    ret_df = pd.DataFrame({})
+    ret_df['Target Date'] = dates
+
+    X = np.array(X)
+    for i in range(0, len(X[0])):
+        ret_df[f'Target-{n - i}'] = X[:, i]
+
+    ret_df['Target'] = Y
+
+    return ret_df
+
+
+def windowed_df_to_date_x_y(windowed_dataframe):
+    df_as_np = windowed_dataframe.to_numpy()
+
+    dates = df_as_np[:, 0]
+
+    middle_matrix = df_as_np[:, 1:-1]
+    X = middle_matrix.reshape((len(dates), middle_matrix.shape[1], 1))
+
+    Y = df_as_np[:, -1]
+
+    return dates, X.astype(np.float32), Y.astype(np.float32)
