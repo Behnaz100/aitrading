@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+import tradermade as tm
 
 import pandas as pd
 
@@ -75,12 +76,20 @@ def predict(
     # $CHA_END
     return 1
 
-
 @app.get("/")
 async def root(request: Request):
-    print(os.path.join(os.getcwd(), "api", 'templates'))
+    tm.set_rest_api_key(params.api_key)
+    # get time in 2024-03-13-00:00 format and 5 days back
 
+    today = pd.Timestamp.now().strftime("%Y-%m-%d-00:00")
+    five_days_back = (pd.Timestamp.now() - pd.Timedelta(days=5)).strftime("%Y-%m-%d-00:00")
+
+    hs = tm.timeseries(currency='EURUSD', start=five_days_back, end=today, interval="daily",
+                  fields=["close"])  # returns timeseries data for the currency requested interval is daily, hourly, minute - fields is optional
+
+    hs_lst = hs.to_dict('records')
+    prediction = 1
 
     # $CHA_BEGIN
-    return templates.TemplateResponse("index.html", {"request": request, "name": "ai-trading"})
+    return templates.TemplateResponse("index.html", {"request": request, "name": "ai-trading", "history_data": hs.to_dict('records'), "prediction": prediction})
     # $CHA_END
