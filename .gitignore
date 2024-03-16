@@ -15,7 +15,6 @@ dist/
 *.vscode
 
 # Data files
-*.csv
 *.sqlite
 *.zip
 training_outputs/
