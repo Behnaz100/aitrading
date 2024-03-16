@@ -21,11 +21,11 @@
   <div class="container col-xxl-8 px-4 py-5">
     <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
       <div id="prediction" class="col-10 col-sm-8 col-lg-6">
-        <span id="tradermake">
-          "prediction" {{prediction}}
+        <span id="tradermake" hidden="hidden">
+          {{prediction}}
         </span>
         <p id="buy_sell">
-
+          buy_sell
         </p>
       </div>
       <div class="col-lg-6">
@@ -116,18 +116,17 @@
         </ul>
       </div>
     </footer>
-
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <script>
-    let pred_var = getElementById("tradermake").value
-    let buy_sell_txt = getElementById("buy_sell")
+    let pred_var = document.getElementById("tradermake").textContent.trim()
+    let buy_sell_txt = document.getElementById("buy_sell")
 
-    if (pred_var == "1"){
-      buy_sell.textContent = 'Buy'
-    } else if (pred_var == "0"){
-      buy_sell.textContent = 'Sell'
+    if (pred_var === "1"){
+      buy_sell_txt.textContent = 'Buy'
+    } else if (pred_var === "0"){
+      buy_sell_txt.textContent = 'Sell'
     }
 
 

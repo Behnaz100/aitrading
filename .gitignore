@@ -27,6 +27,7 @@ training_outputs/
 # Other
 pytestdebug.log
 .idea/
+aitrading/training_outputs/*
 
 # Jupyter Notebook
 # notebook

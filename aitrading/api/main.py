@@ -90,6 +90,7 @@ async def root(request: Request):
     hs_lst = hs.to_dict('records')
     prediction = 1
 
+
     # $CHA_BEGIN
-    return templates.TemplateResponse("index.html", {"request": request, "name": "ai-trading", "history_data": hs.to_dict('records'), "prediction": prediction})
+    return templates.TemplateResponse("index.html", {"request": request, "name": "ai-trading", "history_data": hs_lst, "prediction": prediction})
     # $CHA_END
