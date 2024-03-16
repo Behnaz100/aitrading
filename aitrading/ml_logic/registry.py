@@ -11,6 +11,7 @@ from aitrading.params import *
 import mlflow
 from mlflow.tracking import MlflowClient
 
+
 def save_results(params: dict, metrics: dict) -> None:
     """
     Persist params & metrics locally on the hard drive at
@@ -61,26 +62,19 @@ def load_model(stage="Production") -> keras.Model:
 
     """
 
-    if MODEL_TARGET == "local":
-        print(Fore.BLUE + f"\nLoad latest model from local registry..." + Style.RESET_ALL)
+    print(Fore.BLUE + f"\nLoad latest model from local registry..." + Style.RESET_ALL)
 
-        # Get the latest model version name by the timestamp on disk
-        local_model_directory = os.path.join(LOCAL_REGISTRY_PATH, "models")
-        local_model_paths = glob.glob(f"{local_model_directory}/*")
+    # Get the latest model version name by the timestamp on disk
+    local_model_directory = os.path.join(LOCAL_REGISTRY_PATH, "models")
+    local_model_paths = glob.glob(f"{local_model_directory}/*")
 
-        if not local_model_paths:
-            return None
-
-        most_recent_model_path_on_disk = sorted(local_model_paths)[-1]
-
-        print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
-
-        latest_model = keras.models.load_model(most_recent_model_path_on_disk)
-
-        print("✅ Model loaded from local disk")
-
-        return latest_model
-
-
-    else:
+    if not local_model_paths:
         return None
+
+    most_recent_model_path_on_disk = sorted(local_model_paths)[-1]
+
+    print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
+
+    latest_model = keras.models.load_model(most_recent_model_path_on_disk)
+
+    print("✅ Model loaded from local disk")
