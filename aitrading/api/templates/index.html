@@ -38,7 +38,25 @@
   </div>
 
   <div class="container">
-    {{name}}
+    "prediction" {{prediction}}
+    <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Time</th>
+                    <th scope="col">Close</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in history_data %}
+                    <tr>
+                        <td>{{ item.date }}</td>
+                        <td>{{ item.close }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+    </table>
+
+
     <footer class="py-5">
       <div class="row">
         <div class="col-2">
