@@ -3,20 +3,17 @@ import time
 
 from colorama import Fore, Style
 from typing import Tuple
-
-from keras.src.callbacks import EarlyStopping
-from keras.src.layers import BatchNormalization, Bidirectional
+from tensorflow.python.keras.layers import LSTM, Dense, Dropout
+from keras.callbacks import EarlyStopping
+from keras.layers import BatchNormalization, Bidirectional
 from tensorflow.python.keras.regularizers import l2
 
 # Timing the TF import
 print(Fore.BLUE + "\nLoading TensorFlow..." + Style.RESET_ALL)
 start = time.perf_counter()
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.optimizers import Adam
-from tensorflow.keras import layers
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import LSTM, Dense, Dropout
+from tensorflow.python.keras.models import Sequential
+from tensorflow.python.keras.optimizers import Adam
 from keras import Model
 from tensorflow.python.keras import optimizers
 from typing import Tuple
@@ -133,5 +130,3 @@ def evaluate_model(
     print(f"✅ Model evaluated, Accuracy: {round(accuracy, 2)}")
 
     return metrics
-
-
