@@ -88,7 +88,7 @@ async def root(request: Request):
                   fields=["close"])  # returns timeseries data for the currency requested interval is daily, hourly, minute - fields is optional
 
     hs_lst = hs.to_dict('records')
-    prediction = 1
+    prediction = 1 #app.model.predict()
 
     # $CHA_BEGIN
     return templates.TemplateResponse("index.html", {"request": request, "name": "ai-trading", "history_data": hs.to_dict('records'), "prediction": prediction})
