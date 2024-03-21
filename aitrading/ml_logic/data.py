@@ -11,3 +11,19 @@ def get_data_from_local(file_name) -> pd.DataFrame:
     else:
         raise FileNotFoundError(f'File {file_path} not found')
 
+
+def clean_data(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Clean raw data by
+    - assigning correct dtypes to each column
+    - removing buggy or irrelevant transactions
+    """
+    # Compress raw_data by setting types to DTYPES_RAW
+    df = df.astype(DTYPES_RAW)
+
+    # Remove buggy transactions
+
+    # Remove geographically irrelevant transactions (rows)
+
+
+    return df
