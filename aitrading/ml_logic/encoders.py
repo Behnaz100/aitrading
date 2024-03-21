@@ -4,6 +4,9 @@ import pandas as pd
 import datetime
 
 
+from datetime import datetime, timedelta
+
+
 def str_to_datetime(s):
     split = s.split('-')
     year, month, day = int(split[0]), int(split[1]), int(split[2])
@@ -65,14 +68,5 @@ def df_to_windowed_df(dataframe, first_date_str, last_date_str, n=3):
     return ret_df
 
 
-def windowed_df_to_date_x_y(windowed_dataframe):
-    df_as_np = windowed_dataframe.to_numpy()
 
-    dates = df_as_np[:, 0]
 
-    middle_matrix = df_as_np[:, 1:-1]
-    X = middle_matrix.reshape((len(dates), middle_matrix.shape[1], 1))
-
-    Y = df_as_np[:, -1]
-
-    return dates, X.astype(np.float32), Y.astype(np.float32)
