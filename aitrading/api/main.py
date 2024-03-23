@@ -78,8 +78,12 @@ app.state.model = load_model()
 
 @app.get("/")
 def root(request: Request):
-    tm.set_rest_api_key(params.api_key)
+    # tm.set_rest_api_key(params.api_key)
     model = app.state.model
+
+    if model is None:
+        return "Model not loaded"
+
     assert model is not None
     # get time in 2024-03-13-00:00 format and 5 days back
 
@@ -111,7 +115,7 @@ def root(request: Request):
     prediction = 1 #app.model.predict()
     print(model.predict(hs_dataframe.iloc[:, 0])[0][0])
     pred = "N/A"
-    if model.predict(hs_dataframe.iloc[:, 0])[0][0] > 0.5:
+    if model.predict(hs_dataframe.iloc[:, 0])[0][0] >= 0.5:
         pred = "1"
     else:
         pred = "0"
