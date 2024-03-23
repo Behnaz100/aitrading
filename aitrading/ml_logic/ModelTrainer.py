@@ -1,4 +1,5 @@
 import json
+import pathlib
 from pprint import pprint
 
 import tensorflow as tf
@@ -13,6 +14,8 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import StandardScaler
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.callbacks import EarlyStopping
+
+from aitrading import params
 from aitrading.ml_logic.preprocessor import split_data
 import pandas as pd
 import os
@@ -22,7 +25,7 @@ from pandas import to_datetime
 
 
 def create_binary_target_column(dataframe, column_name):
-    dataframe['shifted_column'] = dataframe[column_name].shift(1)
+    dataframe['shifted_column'] = dataframe[column_name]
     dataframe['target'] = np.where(dataframe[column_name] > dataframe['shifted_column'], 1, 0)
     dataframe.drop(columns=['shifted_column'], inplace=True)
     return dataframe
@@ -55,7 +58,13 @@ class ModelTrainer:
 
     def prepare_data(self, first_date_str, last_date_str, included_columns=None, target_column=None, n=3):
         cache_key = json.dumps((first_date_str, last_date_str, tuple(included_columns) if included_columns else None))
+        # params.LOCAL_DATA_PATH
+        cache_dir = "data_cache"
+        pathlib.Path()
+        cache_file_path = os.path.join(params.LOCAL_DATA_PATH,  f"{cache_key}.pkl")
+        print(cache_file_path)
         print(cache_key)
+
         # return
         if cache_key in self.cache:
             print("Using cached data")
@@ -94,7 +103,7 @@ class ModelTrainer:
             print("Using cached model")
             self.model = self.model_cache[model_key]
         else:
-            early_stopping = EarlyStopping(monitor='val_loss', patience=10)
+            early_stopping = EarlyStopping(monitor='val_accuracy', patience=40)
             self.history = model.fit(self.X_train, self.y_train, validation_data=(self.X_val, self.y_val),
                                      epochs=epochs, callbacks=[early_stopping])
             self.model = model
