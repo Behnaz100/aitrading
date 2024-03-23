@@ -78,7 +78,12 @@ def load_model(stage="Production") -> keras.Model:
     # print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
 
     # Load the model from disk
-    model_path = pathlib.Path(params.LOCAL_REGISTRY_PATH) / 'models' / 'model2.keras'
+    # model_path = os.path.join(Path.cwd() / "training_outputs" / 'models' / 'model2.keras')
+    # / Users / kassraniroumand / code / aitrading / aitrading / training_outputs / models / model2.keras
+    model_path = pathlib.Path(Path.cwd() / "aitrading" / "training_outputs" / 'models' / 'model2.keras')
+    # print("os.getcwd()",model_path)
+    # print("--->", pathlib.Path(Path.cwd()) / "training_outputs" / 'models' / 'model2.keras')
+
     if not model_path.exists():
         print(Fore.RED + f"❌ No model found in {model_path}" + Style.RESET_ALL)
         return None
