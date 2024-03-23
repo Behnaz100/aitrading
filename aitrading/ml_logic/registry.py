@@ -1,5 +1,6 @@
 import glob
 import os
+import pathlib
 import time
 import pickle
 
@@ -7,6 +8,7 @@ from colorama import Fore, Style
 from tensorflow import keras
 from google.cloud import storage
 
+from aitrading import params
 from aitrading.params import *
 import mlflow
 from mlflow.tracking import MlflowClient
@@ -75,7 +77,15 @@ def load_model(stage="Production") -> keras.Model:
     #
     # print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
 
-    latest_model = keras.models.load_model("/Users/kassraniroumand/code/aitrading/aitrading/training_outputs/models/model2.keras")
+    # Load the model from disk
+    model_path = pathlib.Path(params.LOCAL_REGISTRY_PATH) / 'models' / 'model2.keras'
+    if not model_path.exists():
+        print(Fore.RED + f"❌ No model found in {model_path}" + Style.RESET_ALL)
+        return None
+
+    # print("model_path", model_path)
+    latest_model = keras.models.load_model(model_path)
+
     print("latest_model", latest_model)
     print("✅ Model loaded from local disk")
     return latest_model
