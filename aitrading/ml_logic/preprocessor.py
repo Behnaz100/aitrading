@@ -63,7 +63,7 @@ def windowed_df_to_date_x_y(windowed_dataframe):
 
 
 def create_binary_target_column(dataframe, column_name):
-    dataframe['shifted_column'] = dataframe[column_name].shift(1)
+    dataframe['shifted_column'] = dataframe[column_name].shift(1)  # Shift the column to get previous values
     dataframe['target'] = np.where(dataframe[column_name] > dataframe['shifted_column'], 1, 0)
     dataframe.drop(columns=['shifted_column'], inplace=True)
     return dataframe
@@ -120,9 +120,7 @@ def custom_df_to_windowed_df(dataframe, first_date_str, last_date_str, included_
         window_flat = window[:-1].flatten()
         y = window[-1, :]
         windowed_data.append(np.concatenate([window_flat, y]))
-
         dates.append(target_date)
-
         target_date += timedelta(minutes=5)  # Increment the target date by 5 minutes
 
     column_names = generate_column_names(included_columns, n)

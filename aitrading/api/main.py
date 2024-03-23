@@ -90,9 +90,9 @@ def root(request: Request):
     today = pd.Timestamp.now().strftime("%Y-%m-%d-00:00")
     five_days_back = (pd.Timestamp.now() - pd.Timedelta(days=5)).strftime("%Y-%m-%d-00:00")
 
-    # hs = tm.timeseries(currency='EURUSD', start=five_days_back, end=today, interval="daily",
-    #               fields=["close"])  # returns timeseries data for the currency requested interval is daily, hourly, minute - fields is optional
-    hs_list = [{'date': '2024-03-18', 'close': 1.08735}, {'date': '2024-03-19', 'close': 1.08656}, {'date': '2024-03-20', 'close': 1.0921}, {'date': '2024-03-21', 'close': 1.08586}]
+    hs = tm.timeseries(currency='EURUSD', start=five_days_back, end=today, interval="daily",
+                  fields=["close"])  # returns timeseries data for the currency requested interval is daily, hourly, minute - fields is optional
+    # hs_list = [{'date': '2024-03-18', 'close': 1.08735}, {'date': '2024-03-19', 'close': 1.08656}, {'date': '2024-03-20', 'close': 1.0921}, {'date': '2024-03-21', 'close': 1.08586}]
 
     # print("hs", hs)
     # hs_lst = hs.to_dict('records')
