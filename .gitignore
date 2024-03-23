@@ -17,7 +17,6 @@ dist/
 # Data files
 *.sqlite
 *.zip
-training_outputs/
 
 *.sublime-project
 *.sublime-workspace
@@ -26,7 +25,7 @@ training_outputs/
 # Other
 pytestdebug.log
 .idea/
-aitrading/training_outputs/*
 
+#aitrading/training_outputs/*
 # Jupyter Notebook
 # notebook

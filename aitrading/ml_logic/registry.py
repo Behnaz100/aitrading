@@ -1,5 +1,6 @@
 import glob
 import os
+import pathlib
 import time
 import pickle
 
@@ -7,6 +8,7 @@ from colorama import Fore, Style
 from tensorflow import keras
 from google.cloud import storage
 
+from aitrading import params
 from aitrading.params import *
 import mlflow
 from mlflow.tracking import MlflowClient
@@ -65,16 +67,25 @@ def load_model(stage="Production") -> keras.Model:
     print(Fore.BLUE + f"\nLoad latest model from local registry..." + Style.RESET_ALL)
 
     # Get the latest model version name by the timestamp on disk
-    local_model_directory = os.path.join(LOCAL_REGISTRY_PATH, "models")
-    local_model_paths = glob.glob(f"{local_model_directory}/*")
+    # local_model_directory = os.path.join(LOCAL_REGISTRY_PATH, "models")
+    # local_model_paths = glob.glob(f"{local_model_directory}/*")
+    #
+    # if not local_model_paths:
+    #     return None
+    #
+    # most_recent_model_path_on_disk = sorted(local_model_paths)[-1]
+    #
+    # print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
 
-    if not local_model_paths:
+    # Load the model from disk
+    model_path = pathlib.Path(params.LOCAL_REGISTRY_PATH) / 'models' / 'model2.keras'
+    if not model_path.exists():
+        print(Fore.RED + f"❌ No model found in {model_path}" + Style.RESET_ALL)
         return None
 
-    most_recent_model_path_on_disk = sorted(local_model_paths)[-1]
+    # print("model_path", model_path)
+    latest_model = keras.models.load_model(model_path)
 
-    print(Fore.BLUE + f"\nLoad latest model from disk..." + Style.RESET_ALL)
-
-    latest_model = keras.models.load_model(most_recent_model_path_on_disk)
-
+    print("latest_model", latest_model)
     print("✅ Model loaded from local disk")
+    return latest_model
