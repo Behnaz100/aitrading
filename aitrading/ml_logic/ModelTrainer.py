@@ -1,7 +1,7 @@
 import json
 import pathlib
 from pprint import pprint
-
+import pickle
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras.layers import Input, LSTM, GRU, SimpleRNN, Dense, GlobalMaxPool1D
@@ -25,7 +25,7 @@ from pandas import to_datetime
 
 
 def create_binary_target_column(dataframe, column_name):
-    dataframe['shifted_column'] = dataframe[column_name]
+    dataframe['shifted_column'] = dataframe[column_name].shift(-1)
     dataframe['target'] = np.where(dataframe[column_name] > dataframe['shifted_column'], 1, 0)
     dataframe.drop(columns=['shifted_column'], inplace=True)
     return dataframe
@@ -57,42 +57,55 @@ class ModelTrainer:
         self.model_cache = {}
 
     def prepare_data(self, first_date_str, last_date_str, included_columns=None, target_column=None, n=3):
-        cache_key = json.dumps((first_date_str, last_date_str, tuple(included_columns) if included_columns else None))
-        # params.LOCAL_DATA_PATH
+        cache_key = json.dumps((target_column, n,first_date_str, last_date_str, tuple(included_columns) if included_columns else None))
+
+        # Define cache directory and file path
         cache_dir = "data_cache"
-        pathlib.Path()
-        cache_file_path = os.path.join(params.LOCAL_DATA_PATH,  f"{cache_key}.pkl")
-        print(cache_file_path)
-        print(cache_key)
+        cache_file_path = os.path.join(params.LOCAL_DATA_PATH, cache_dir, f"{cache_key}.pkl")
 
-        # return
-        if cache_key in self.cache:
+        # Ensure cache directory exists
+        os.makedirs(os.path.dirname(cache_file_path), exist_ok=True)
+
+        # Check if data is already cached
+        if os.path.exists(cache_file_path):
             print("Using cached data")
-            self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val, self.dates_test, self.X_test, self.y_test = \
-                self.cache[cache_key]
+            with open(cache_file_path, 'rb') as f:
+                self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val, self.dates_test, self.X_test, self.y_test = pickle.load(
+                    f)
         else:
-            print("not using cached data")
-
+            print("Not using cached data")
             if included_columns is None:
-                print("✅ using all columns")
+                print("✅ Using all columns")
                 included_columns = self.dataframe.columns.tolist()
 
-            # create_binary_target_column(self.windowed_df, f'{included_columns[0]}_Target')
+            # Assuming custom_df_to_windowed_df and split_data are defined elsewhere and work as intended
             self.windowed_df = custom_df_to_windowed_df(self.dataframe, first_date_str, last_date_str, included_columns,
                                                         n)
-
+            print(self.windowed_df)
             self.n = n
-            # create_binary_target_column(self.windowed_df, f'{included_columns[0]}_Target')
             (self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val, self.dates_test,
              self.X_test, self.y_test) = split_data(
                 self.windowed_df.index,
-                self.windowed_df.iloc[:, 0:-2],
+                self.windowed_df.iloc[:, :-2],
                 self.windowed_df.iloc[:, -1],
-                # dates, x, y
             )
-            self.cache[cache_key] = (
-                self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val, self.dates_test,
-                self.X_test, self.y_test)
+            # Write the processed data to cache
+            with open(cache_file_path, 'wb') as f:
+                pickle.dump((self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val,
+                             self.dates_test, self.X_test, self.y_test), f)
+
+    def prepare_predict_data(self, x, first_date_str, last_date_str, included_columns=None, target_column=None, n=3):
+
+        self.windowed_df = custom_df_to_windowed_df(x, first_date_str, last_date_str, included_columns, n)
+
+        self.n = n
+        (self.dates_train, self.X_train, self.y_train, self.dates_val, self.X_val, self.y_val, self.dates_test,
+         self.X_test, self.y_test) = split_data(
+            self.windowed_df.index,
+            self.windowed_df.iloc[:, :-2],
+            self.windowed_df.iloc[:, -1],
+            (0.1, 0.9)
+        )
 
     def train_model(self, model, epochs=100):
         # model should be compiled before calling this method
@@ -103,7 +116,7 @@ class ModelTrainer:
             print("Using cached model")
             self.model = self.model_cache[model_key]
         else:
-            early_stopping = EarlyStopping(monitor='val_accuracy', patience=40)
+            early_stopping = EarlyStopping(monitor='val_accuracy', patience=5)
             self.history = model.fit(self.X_train, self.y_train, validation_data=(self.X_val, self.y_val),
                                      epochs=epochs, callbacks=[early_stopping])
             self.model = model
