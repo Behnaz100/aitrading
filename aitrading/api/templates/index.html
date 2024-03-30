@@ -9,19 +9,29 @@
   <title>ai_trading.io</title>
 </head>
 <style>
-  #buy_sell{
-    text-align: 'center' !important ;
+  #buy_sell {
+    text-align: 'center' !important;
     vertical-align: 'middle' !important;
+
+    padding-bottom: 3rem;
   }
 
-  #tradermake{
+  #tradermake {
     display: none !important;
   }
 
+  #buy_sell_button {
+    font-size: 2rem !important;
+  }
+
+  #t_and_c {
+    font-size: 1rem !important;
+  }
 </style>
+
 <body>
   <nav class="navbar bg-light">
-    <div class="container-fluid">
+    <div class="container">
       <a class="navbar-brand">ai_trading.io</a>
       <form class="d-flex" role="search">
         <button class="btn btn-outline-secondary" type="submit">Login</button>
@@ -30,17 +40,19 @@
   </nav>
   <br>
   <div class="container col-xxl-8 px-4 py-5">
-    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+    <div class="row flex-lg-row-reverse align-items-center g-5">
       <div class="col-10 col-sm-8 col-lg-6">
         <img
           src="https://thumbor.forbes.com/thumbor/fit-in/900x510/https://www.forbes.com/advisor/wp-content/uploads/2023/03/stock_chart.jpeg"
           class="d-block mx-lg-auto img-fluid" alt="Bootstrap Themes" width="700" height="500" loading="lazy">
       </div>
-      <div class="col-lg-6">
+      <div class="col-lg-6 py-5">
         <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">AI Trading: Here's What You Need To Know</h1>
-        <p class="lead">AI trading software encompasses a range of tools that utilize artificial intelligence to aid investors and traders in
-        navigating financial markets. They are designed to enhance the decision-making process by providing data-driven insights
-        and automating trading actions</p>
+        <p class="lead">AI trading software encompasses a range of tools that utilize artificial intelligence to aid
+          investors and traders in
+          navigating financial markets. They are designed to enhance the decision-making process by providing
+          data-driven insights
+          and automating trading actions</p>
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
           <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Sign Up</button>
           <button type="button" class="btn btn-outline-secondary btn-lg px-4">Learn More</button>
@@ -48,44 +60,71 @@
       </div>
     </div>
   </div>
+  <div class="my-5">
+    <div class="container d-flex justify-content-center py-5 ">
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget">
 
-  <div class="d-flex justify-content-center">
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js"
-        async>
-          {
-            "width": "980",
-            "height": "610",
-            "symbol": "FX:EURUSD",
-            "interval": "5",
-            "timezone": "Europe/Dublin",
-            "theme": "light",
-            "style": "1",
-            "locale": "en",
-            "enable_publishing": false,
-            "allow_symbol_change": true,
-            "calendar": false,
-            "support_host": "https://www.tradingview.com"
-          }
-        </script>
+        </div>
+
+        <script type="text/javascript"
+          src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+            {
+              "width": "980",
+                "height": "610",
+                  "symbol": "FX:EURUSD",
+                    "interval": "5",
+                      "timezone": "Europe/Dublin",
+                        "theme": "light",
+                          "style": "1",
+                            "locale": "en",
+                              "enable_publishing": false,
+                                "allow_symbol_change": true,
+                                  "calendar": false,
+                                    "support_host": "https://www.tradingview.com"
+            }
+          </script>
+      </div>
     </div>
-  </div>
-  <div class ="d-flex justify-content-center">
-    <div id ="tradermake">{{prediction}}</div>
-    <h2 id="buy_sell"></h2>
+    <div class="d-flex justify-content-center">
+      <div id="tradermake">{{prediction}}</div>
+      <div id="buy_sell"></div>
+      <div id="t_and_c"></div>
+    </div>
   </div>
 
   <div class="px-4 py-5 my-5 text-center">
 
-    <h1 class="display-5 fw-bold text-body-emphasis">How does AI trading  ensure profitability?</h1>
+    <h1 class="display-5 fw-bold text-body-emphasis">How does AI trading ensure profitability?</h1>
     <div class="col-lg-6 mx-auto">
-      <p class="lead mb-4">AI trading platforms utilize complex algorithms and machine learning to analyze market data and trends. They make
-      predictions and execute trades at optimal times, however, profitability cannot be guaranteed due to the inherent risk in
-      trading.</p>
+      <p class="lead mb-4">AI trading platforms utilize complex algorithms and machine learning to analyze market data
+        and trends. They make
+        predictions and execute trades at optimal times, however, profitability cannot be guaranteed due to the inherent
+        risk in
+        trading.</p>
 
     </div>
   </div>
+
+
+  <div class="container col-xxl-8 px-4 py-5 my-5 ">
+    <div class="row flex-lg-row-reverse align-items-center g-5 py-5">
+      <div class="col-10 col-sm-8 col-lg-6">
+        <h1 class="display-5 fw-bold text-body-emphasis lh-1 mb-3">Technical Analysis Made Easy</h1>
+        <p class="lead"> Our AI trading software well provide you with all the tools to analise data but its very
+          important
+          that a fundamental (reactive news) strategy is also employed.
+          Using both a technical and fundamental approach ensures you will have the highest chance of success.
+        </p>
+
+      </div>
+      <div class="col-lg-6">
+        <img src="https://uploads.tradestation.com/uploads/indicators.jpg" class="d-block mx-lg-auto img-fluid"
+          alt="Bootstrap Themes" width="700" height="500" loading="lazy">
+      </div>
+    </div>
+  </div>
+
 
   <div class="bg-light">
     <div class="container bg-light">
@@ -139,7 +178,7 @@
         </div>
 
         <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
-          <p>© 2024 Company, Inc. All rights reserved.</p>
+          <p>© 2024 ai_trading. All rights reserved.</p>
           <ul class="list-unstyled d-flex">
             <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
                   <use xlink:href="#twitter"></use>
@@ -163,10 +202,12 @@
   let pred_var = document.getElementById("tradermake").textContent.trim()
   let buy_sell_txt = document.getElementById("buy_sell")
 
+
+
   if (pred_var === "1") {
-    buy_sell_txt.textContent = 'Predicted Market Direction: Buy/long/up '
+    buy_sell_txt.innerHTML = '<button type="button" id=buy_sell_button class="btn btn-success btn-lg">BUY</button>'
   } else if (pred_var === "0") {
-    buy_sell_txt.textContent = 'Predicted Market Direction: Sell/Short/Down'
+    buy_sell_txt.innerHTML = '<button type="button" id=buy_sell_button class="btn btn-danger btn-lg">SELL</button>'
   }
 </script>
 
