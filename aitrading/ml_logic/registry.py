@@ -6,12 +6,9 @@ import pickle
 
 from colorama import Fore, Style
 from tensorflow import keras
-from google.cloud import storage
 
 from aitrading import params
 from aitrading.params import *
-import mlflow
-from mlflow.tracking import MlflowClient
 
 
 def save_results(params: dict, metrics: dict) -> None:
@@ -80,7 +77,9 @@ def load_model(stage="Production") -> keras.Model:
     # Load the model from disk
     # model_path = os.path.join(Path.cwd() / "training_outputs" / 'models' / 'model2.keras')
     # / Users / kassraniroumand / code / aitrading / aitrading / training_outputs / models / model2.keras
-    model_path = pathlib.Path(Path.cwd() / "aitrading" / "training_outputs" / 'models' / 'model2.keras')
+    model_path = pathlib.Path(Path.cwd() / "aitrading" / 'models' / 'model2.keras')
+    assert os.path.isfile(model_path)
+
     # print("os.getcwd()",model_path)
     # print("--->", pathlib.Path(Path.cwd()) / "training_outputs" / 'models' / 'model2.keras')
 
@@ -89,8 +88,15 @@ def load_model(stage="Production") -> keras.Model:
         return None
 
     # print("model_path", model_path)
-    latest_model = keras.models.load_model(model_path)
+    print(f"✅ Model found in local {model_path}")
+    with open(model_path, "rb") as file_:
+        if file_:
+            latest_model = keras.models.load_model(model_path)
+            print("latest_model", latest_model)
+            print("✅ Model loaded from local disk")
+            return latest_model
+    # latest_model = keras.models.load_model(model_path)
 
-    print("latest_model", latest_model)
-    print("✅ Model loaded from local disk")
-    return latest_model
+    # print("latest_model", latest_model)
+    # print("✅ Model loaded from local disk")
+    return None

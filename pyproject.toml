@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "aitrading"
+version = "0.1.0"
+description = ""
+authors = ["kassraniroumand <kassra.niroumand@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pandas = "^2.2.1"
+tensorflow = "^2.16.1"
+testapi = "^0.1.0"
+fastapi = "^0.110.0"
+uvicorn = "^0.29.0"
+colorama = "^0.4.6"
+jinja2 = "^3.1.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
