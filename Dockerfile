@@ -29,26 +29,22 @@ WORKDIR /prod
 
 ENV PORT=8000
 
-# We strip the requirements from useless packages like `ipykernel`, `matplotlib` etc...
-#COPY requirements_old.txt requirements_old.txt
-#RUN pip install -r requirements_old.txt
-#USER dockuser
+RUN pip install poetry==1.4.2
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_VIRTUALENVS_IN_PROJECT=1 \
+    POETRY_VIRTUALENVS_CREATE=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
+WORKDIR /app
+
+COPY pyproject.toml poetry.lock ./
+RUN touch README.md
+
+RUN poetry install --without dev --no-root && rm -rf $POETRY_CACHE_DIR
+
 COPY aitrading aitrading
 COPY setup.py setup.py
-COPY aitrading/models aitrading/models
 
-
-#COPY peotry.lock poetry.lock
-COPY pyproject.toml pyproject.toml
-
-
-RUN pip install poetry
-RUN poetry install
-#RUN pip install uvicorn
-
-COPY Makefile Makefile
-#RUN make reset_local_files
-
+RUN poetry install --without dev
 CMD uvicorn aitrading.api.main:app --host 0.0.0.0 --port $PORT
-#CMD make run_fast_api
-# $DEL_END
