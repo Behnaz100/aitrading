@@ -5,8 +5,8 @@
 
 # WORKDIR /prod
 
-# COPY requirements.txt requirements.txt
-# RUN pip install -r requirements.txt
+# COPY requirements_old.txt requirements_old.txt
+# RUN pip install -r requirements_old.txt
 
 # COPY taxifare taxifare
 # COPY setup.py setup.py
@@ -20,22 +20,35 @@
 ####### 👇 OPTIMIZED SOLUTION (x86)👇 #######
 
 # tensorflow base-images are optimized: lighter than python-buster + pip install tensorflow
-FROM tensorflow/tensorflow:2.10.0
+FROM tensorflow/tensorflow:latest
 # OR for apple silicon, use this base image instead
-# FROM armswdev/tensorflow-arm-neoverse:r22.09-tf-2.10.0-eigen
+#FROM armswdev/tensorflow-arm-neoverse:latest
+
 
 WORKDIR /prod
 
-# We strip the requirements from useless packages like `ipykernel`, `matplotlib` etc...
-COPY requirements_prod.txt requirements.txt
-RUN pip install -r requirements.txt
+ENV PORT=8000
 
-COPY taxifare taxifare
+# We strip the requirements from useless packages like `ipykernel`, `matplotlib` etc...
+#COPY requirements_old.txt requirements_old.txt
+#RUN pip install -r requirements_old.txt
+#USER dockuser
+COPY aitrading aitrading
 COPY setup.py setup.py
-RUN pip install .
+COPY aitrading/models aitrading/models
+
+
+#COPY peotry.lock poetry.lock
+COPY pyproject.toml pyproject.toml
+
+
+RUN pip install poetry
+RUN poetry install
+#RUN pip install uvicorn
 
 COPY Makefile Makefile
-RUN make reset_local_files
+#RUN make reset_local_files
 
-CMD uvicorn taxifare.api.fast:app --host 0.0.0.0 --port $PORT
+CMD uvicorn aitrading.api.main:app --host 0.0.0.0 --port $PORT
+#CMD make run_fast_api
 # $DEL_END

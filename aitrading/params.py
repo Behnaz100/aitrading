@@ -9,7 +9,7 @@ api_key=os.environ.get("api_key")
 ##################  CONSTANTS  #####################
 LOCAL_DATA_PATH = Path(os.getcwd()).parent / "data"
 LOCAL_REGISTRY_PATH = Path(os.getcwd()).parent / "training_outputs"
-
+LOCAL_PATH = Path(os.getcwd()).parent
 
 
 ################## VALIDATIONS #################
