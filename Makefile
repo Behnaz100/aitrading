@@ -5,6 +5,11 @@ reinstall_package:
 	@pip install -e .
 
 
+docker_run:
+	sudo docker run  -it --platform linux/amd64  -e PORT=9009 kassraniroumand/aitrading:v70
+
+docker_build:
+	docker buildx build -t kassraniroumand/aitrading:v70 . --platform linux/amd64
 
 run_preprocess:
 	python -c 'from aitrading.interface.main import preprocess; preprocess()'

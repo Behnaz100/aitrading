@@ -4,7 +4,7 @@ import numpy as np
 from aitrading.ml_logic2.utility import calculate_rsi
 
 
-def enrich_dataframe(df: pd.DataFrame, datetime_col: str='datetime') -> pd.DataFrame:
+ def enrich_dataframe(df: pd.DataFrame, predicate: bool = False, datetime_col: str = 'datetime') -> pd.DataFrame:
     """
     Enriches the input DataFrame with financial analytics features. Validates the presence of required columns
     including a dynamic datetime column, 'close', and 'low' before proceeding. Adds time-based features, moving
@@ -28,7 +28,8 @@ def enrich_dataframe(df: pd.DataFrame, datetime_col: str='datetime') -> pd.DataF
     preprocessing_df.sort_values(by='timestamp', inplace=True)
 
     # Calculate the target variable
-    preprocessing_df['target'] = (df['close'].shift(-1) > df['close']).astype(int)
+    if not predicate:
+        preprocessing_df['target'] = (df['close'].shift(-1) > df['close']).astype(int)
 
     # Time-based features
     preprocessing_df['hour'] = preprocessing_df['timestamp'].dt.hour

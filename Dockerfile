@@ -20,12 +20,10 @@
 ####### 👇 OPTIMIZED SOLUTION (x86)👇 #######
 
 # tensorflow base-images are optimized: lighter than python-buster + pip install tensorflow
-FROM tensorflow/tensorflow:latest
+#FROM tensorflow/tensorflow:latest
 # OR for apple silicon, use this base image instead
-#FROM armswdev/tensorflow-arm-neoverse:latest
+FROM armswdev/tensorflow-arm-neoverse:latest
 
-
-WORKDIR /prod
 
 ENV PORT=8000
 
@@ -47,4 +45,6 @@ COPY aitrading aitrading
 COPY setup.py setup.py
 
 RUN poetry install --without dev
-CMD uvicorn aitrading.api.main:app --host 0.0.0.0 --port $PORT
+
+CMD poetry run uvicorn aitrading.api.main2:app --host 0.0.0.0 --port ${PORT}
+
