@@ -4,7 +4,7 @@ import numpy as np
 from aitrading.ml_logic2.utility import calculate_rsi
 
 
- def enrich_dataframe(df: pd.DataFrame, predicate: bool = False, datetime_col: str = 'datetime') -> pd.DataFrame:
+def enrich_dataframe(df: pd.DataFrame, predicate: bool = False, datetime_col: str = 'datetime') -> pd.DataFrame:
     """
     Enriches the input DataFrame with financial analytics features. Validates the presence of required columns
     including a dynamic datetime column, 'close', and 'low' before proceeding. Adds time-based features, moving
