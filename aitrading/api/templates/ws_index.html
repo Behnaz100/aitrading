@@ -26,6 +26,11 @@
   #t_and_c {
     font-size: 1rem !important;
   }
+  .sseContainer{
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+
     </style>
 </head>
 <body>
@@ -40,7 +45,8 @@
   <div class="px-4 py-5 my-5 text-center">
   <h1 class="display-5 fw-bold text-body-emphasis">Market Predictions</h1>
     <div class="col-lg-6 mx-auto">
-      <div class="container" id="sseContainer"></div>
+      <div class="container" id="sseContainer">
+     </div>
     </div>
   </div>
 
@@ -125,9 +131,9 @@
             const card = document.createElement("div");
             card.className = "card";
             card.innerHTML = `
-                <div class="prediction">Prediction: ${data.prediction}</div>
-                <div class="time">Current Time: ${currentTime.toLocaleTimeString()}</div>
-                <div class="target-time">Target Time: ${futureTime.toLocaleTimeString()}</div>
+                <div class="prediction"> <h5 class="card-title">Prediction: ${data.prediction}</h5></div>
+                <div class="time"><p class="card-text"> Current Time: ${currentTime.toLocaleTimeString()}</p></div>
+                <div class="target-time"><p class="card-text">Target Time: ${futureTime.toLocaleTimeString()}</p></div>
             `;
 
             document.getElementById('sseContainer').prepend(card);
