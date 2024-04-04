@@ -136,16 +136,18 @@
             const currentTime = new Date(data.time);
             const futureTime = new Date(currentTime.getTime() + 5 * 60000);
             const pred = data.prediction;
-            let pred_html = pred == "Buy" ? `<p class="card-text green">Target Time: ${pred}</p>` : `<p class="card-text red">Target Time: ${pred}</p>`
+            let pred_html = pred == "Buy" ? `<p class="card-text green">Prediction: ${pred}</p>` : `<p class="card-text red">Prediction: ${pred}</p>`
 
             const card = document.createElement("div");
 
             card.className = "card";
             card.innerHTML = `
-                <div class="prediction"> <h5 class="card-title">Prediction: ${pred_html}</h5></div>
+                <div class="prediction"> <h5 class="card-title"> ${pred_html}</h5></div>
                 <div class="time"><p class="card-text"> Current Time: ${currentTime.toLocaleTimeString()}</p></div>
                 <div class="target-time"><p class="card-text">Target Time: ${futureTime.toLocaleTimeString()}</p></div>
+                <div>
                 <button type="button" class="btn btn-secondary btn-sm">Place Trade</button>
+                <div>
             `;
 
           document.getElementById('sseContainer').prepend(card);
