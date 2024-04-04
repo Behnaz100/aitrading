@@ -20,9 +20,9 @@
 ####### 👇 OPTIMIZED SOLUTION (x86)👇 #######
 
 # tensorflow base-images are optimized: lighter than python-buster + pip install tensorflow
-#FROM tensorflow/tensorflow:latest
+FROM tensorflow/tensorflow:latest
 # OR for apple silicon, use this base image instead
-FROM armswdev/tensorflow-arm-neoverse:latest
+#FROM armswdev/tensorflow-arm-neoverse:latest
 
 
 ENV PORT=8000
