@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 
 ##################  VARIABLES  ##################
-api_key=os.environ.get("api_key")
+api_key = os.environ.get("api_key")
 
 
 ##################  CONSTANTS  #####################

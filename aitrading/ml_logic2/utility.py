@@ -1,6 +1,8 @@
 import requests
 import pandas as pd
 
+from aitrading import params
+
 
 def calculate_rsi(data, window=5):
     """
@@ -29,13 +31,31 @@ def data_tradermade_source():
     # compute for last 50 minutes
     start = datetime.datetime.now() - datetime.timedelta(hours=2)
     start = start.strftime("%Y-%m-%d-%H:%M")
-    print(f"start {start}, now {now}")
 
-    url = f"https://marketdata.tradermade.com/api/v1/timeseries?currency=EURUSD&api_key=zNv02V5PnDlZwEQypn1j&start_date={start}&end_date={now}&format=records&interval=minute&period=5"
-    res = requests.get(url).json()
-    return pd.DataFrame(res['quotes'])
+    print(f"➡️ request data from  {start} to {now}")
+
+    if params.api_key is None:
+        raise ValueError("Please set the API key in the environment")
+
+    if params.api_key == "should_be_replaced_with_your_api_key":
+        raise ValueError("Please set the API key in the environment")
+
+    parameters = {
+        'currency': 'EURUSD',
+        'api_key': f"{params.api_key}",
+        'start_date': f"{start}",
+        'end_date': f"{now}",
+        'format': 'records',
+        'interval': 'minute',
+        'period': 5
+    }
+
+    url = f"https://marketdata.tradermade.com/api/v1/timeseries"
+    res = requests.get(url, params= parameters).json()
+    df = pd.DataFrame(res['quotes'])
+    print(f"➡️ data_tradermade_source {len(df)}")
+    return pd.DataFrame(df)
 
 
 def load_data_source(path: str) -> pd.DataFrame:
-    # return pd.read_csv("/Users/kassraniroumand/code/aitrading/aitrading/data/eurousd_df_clean_2.csv")
     return pd.read_csv(path)
