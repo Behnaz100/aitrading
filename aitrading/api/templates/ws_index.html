@@ -26,6 +26,10 @@
   #t_and_c {
     font-size: 1rem !important;
   }
+#btn {
+  margin-bottom: 0.5rem;
+}
+
   .card {
     margin-top: 0.5rem !important;
     margin-bottom: 0.5rem !important;
@@ -145,9 +149,10 @@
                 <div class="prediction"> <h5 class="card-title"> ${pred_html}</h5></div>
                 <div class="time"><p class="card-text"> Current Time: ${currentTime.toLocaleTimeString()}</p></div>
                 <div class="target-time"><p class="card-text">Target Time: ${futureTime.toLocaleTimeString()}</p></div>
+                <div id="btn">
+                <button type="button" class="btn btn-primary  btn-sm">Place Trade</button>
                 <div>
-                <button type="button" class="btn btn-secondary btn-sm">Place Trade</button>
-                <div>
+
             `;
 
           document.getElementById('sseContainer').prepend(card);
