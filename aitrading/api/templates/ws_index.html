@@ -1,79 +1,124 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Luxurious Market Predictions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <title>ai_trading.io</title>
+</head>
     <style>
-        body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            background: #000; /* Deep black background */
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #FFD700; /* Gold accents */
-            min-height: 100vh;
-            padding: 40px 20px;
-            box-sizing: border-box;
-        }
-        h1 {
-            color: #FFD700;
-            margin: 0 0 20px;
-            font-weight: 700;
-        }
-        .container {
-            overflow-y: auto; /* Enables scrolling for overflow */
-            max-height: 80vh; /* Limits the container to 80% of the viewport height */
-            width: 100%;
-            max-width: 600px; /* Maximum width for the container */
-            padding: 20px;
-            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.4); /* Soft golden glow */
-            border-radius: 10px;
-            border: 1px solid #FFD700;
-        }
-        .card {
-            background: rgba(255, 255, 255, 0.05); /* Semi-transparent cards for luxury feel */
-            border: 1px solid #FFD700; /* Gold border */
-            border-radius: 10px;
-            margin: 10px 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); /* Subtle shadow for depth */
-            animation: fadeIn 0.5s ease-out;
-        }
-        .prediction {
-            color: #FFD700;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-        }
-        .time, .target-time {
-            color: #FFD700;
-            font-size: 0.95rem;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* Scrollbar Styles */
-        .container::-webkit-scrollbar {
-            width: 8px;
-        }
-        .container::-webkit-scrollbar-thumb {
-            background: #FFD700;
-            border-radius: 4px;
-        }
-        .container::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-        }
+      #buy_sell {
+    text-align: 'center' !important;
+    vertical-align: 'middle' !important;
+
+    padding-bottom: 3rem;
+  }
+
+  #tradermake {
+    display: none !important;
+  }
+
+  #buy_sell_button {
+    font-size: 2rem !important;
+  }
+
+  #t_and_c {
+    font-size: 1rem !important;
+  }
     </style>
 </head>
 <body>
-    <h1>Market Predictions</h1>
-    <div class="container" id="sseContainer"></div>
+  <nav class="navbar bg-light">
+    <div class="container">
+      <a class="navbar-brand">ai_trading.io</a>
+      <form class="d-flex" role="search">
+        <button class="btn btn-outline-secondary" type="submit">Login</button>
+      </form>
+    </div>
+  </nav>
+  <div class="px-4 py-5 my-5 text-center">
+  <h1 class="display-5 fw-bold text-body-emphasis">Market Predictions</h1>
+    <div class="col-lg-6 mx-auto">
+      <div class="container" id="sseContainer"></div>
+    </div>
+  </div>
+
+<div class="bg-light">
+  <div class="container bg-light">
+    <footer class="py-5">
+      <div class="row">
+        <div class="col-6 col-md-2 mb-3">
+          <h5>PRIVACY</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Policy</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Cookies</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Legal</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Manage Preferences</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Marketing</a></li>
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-2 mb-3">
+          <h5>INVESTOR RELATIONS</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Careers</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Mobile Apps</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Trust Center</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">FAQs</a></li>
+
+          </ul>
+        </div>
+
+        <div class="col-6 col-md-2 mb-3">
+          <h5>CONTACT</h5>
+          <ul class="nav flex-column">
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Contact Us</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Advertise</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Pricing</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">Newsletters</a></li>
+            <li class="nav-item mb-2"><a href="#" class="nav-link p-0 text-body-secondary">About</a></li>
+          </ul>
+        </div>
+
+        <div class="col-md-5 offset-md-1 mb-3">
+          <form>
+            <h5>Subscribe to our newsletter</h5>
+            <p>Monthly digest of what's new and exciting from us.</p>
+            <div class="d-flex flex-column flex-sm-row w-100 gap-2">
+              <label for="newsletter1" class="visually-hidden">Email address</label>
+              <input id="newsletter1" type="text" class="form-control" placeholder="Email address"
+                fdprocessedid="y5lhbl">
+              <button class="btn btn-primary" type="button" fdprocessedid="n45yg">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <div class="d-flex flex-column flex-sm-row justify-content-between py-4 my-4 border-top">
+        <p>© 2024 ai_trading. All rights reserved.</p>
+        <ul class="list-unstyled d-flex">
+          <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                <use xlink:href="#twitter"></use>
+              </svg></a></li>
+          <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                <use xlink:href="#instagram"></use>
+              </svg></a></li>
+          <li class="ms-3"><a class="link-body-emphasis" href="#"><svg class="bi" width="24" height="24">
+                <use xlink:href="#facebook"></use>
+              </svg></a></li>
+        </ul>
+      </div>
+    </footer>
+  </div>
+
+
+</div>
+
+
+
+
+
 
     <script>
         var eventSource = new EventSource("/model_stream");
