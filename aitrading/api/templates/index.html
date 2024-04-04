@@ -56,9 +56,7 @@
         <div class="d-grid gap-2 d-md-flex justify-content-md-start">
           <button type="button" class="btn btn-primary btn-lg px-4 me-md-2">Sign Up</button>
           <button  type="button" class="btn btn-outline-secondary btn-lg px-4">
-            <a href="/live_update">
-              Learn More
-            </a>
+             Learn More
           </button>
         </div>
       </div>
@@ -206,12 +204,10 @@
   let pred_var = document.getElementById("tradermake").textContent.trim()
   let buy_sell_txt = document.getElementById("buy_sell")
 
-
-
   if (pred_var === "1") {
-    buy_sell_txt.innerHTML = '<button type="button" id=buy_sell_button class="btn btn-success btn-lg">BUY</button>'
+    buy_sell_txt.innerHTML = '<a href="/live_update"><button type="button" id=buy_sell_button class="btn btn-success btn-lg">BUY</button></a>'
   } else if (pred_var === "0") {
-    buy_sell_txt.innerHTML = '<button type="button" id=buy_sell_button class="btn btn-danger btn-lg">SELL</button>'
+    buy_sell_txt.innerHTML = '<a href="/live_update"><button type="button" id=buy_sell_button class="btn btn-danger btn-lg">Sell</button></a>'
   }
 </script>
 
